@@ -91,5 +91,8 @@ export const uploadService = {
 }
 
 export const adminService = {
-  getStats: () => API.get('/admin/stats'),
+  getStats:   () => API.get('/admin/stats'),
+  getUsers:   () => API.get('/admin/users'),
+  createUser: (data) => API.post('/admin/users', data),
+  deleteUser: (id) => API.delete(`/admin/users/${id}`),
 }
