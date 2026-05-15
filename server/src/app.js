@@ -34,12 +34,21 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 
-// CORS
-const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173').split(',').map(s => s.trim().replace(/\/$/, ''));
+// CORS - Allow CLIENT_URL, localhost, and Same-Origin
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5000',
+  ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',').map(s => s.trim().replace(/\/$/, '')) : [])
+];
+
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) callback(null, true);
-    else callback(new Error('Not allowed by CORS'));
+    // Allow if no origin (mobile apps, curl, etc.) or if it's in the allowed list
+    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV === 'production') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
   },
   credentials: true,
   optionsSuccessStatus: 200

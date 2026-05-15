@@ -11,7 +11,17 @@ let io;
 const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: (process.env.CLIENT_URL || 'http://localhost:5173').split(',').map(s => s.trim().replace(/\/$/, '')),
+      origin: (origin, callback) => {
+        if (process.env.NODE_ENV === 'production' || !origin || [
+          'http://localhost:5173',
+          'http://localhost:5000',
+          ...(process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',').map(s => s.trim().replace(/\/$/, '')) : [])
+        ].includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
       methods: ['GET', 'POST'],
       credentials: true
     },
