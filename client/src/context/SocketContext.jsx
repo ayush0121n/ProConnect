@@ -14,16 +14,20 @@ export const SocketProvider = ({ children }) => {
     if (isAuthenticated && user) {
       const s = io(import.meta.env.VITE_SOCKET_URL || '', {
         auth: { token: localStorage.getItem('token') },
-        transports: ['websocket'],
+        transports: ['websocket', 'polling'],
+      })
+      s.on('connect_error', () => {
+        // silently handle connection errors (e.g. when backend is starting)
       })
       s.on('getOnlineUsers', setOnlineUsers)
       setSocket(s)
-      return () => s.close()
-    } else {
-      socket?.close()
-      setSocket(null)
+      return () => {
+        s.close()
+        setSocket(null)
+        setOnlineUsers([])
+      }
     }
-  }, [isAuthenticated, user])
+  }, [isAuthenticated, user?._id])
 
   return (
     <SocketContext.Provider value={{ socket, onlineUsers, isOnline: (id) => onlineUsers.includes(id?.toString()) }}>

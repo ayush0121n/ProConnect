@@ -7,7 +7,7 @@ router.get('/', protect, getJobs);
 router.get('/saved', protect, getSavedJobs);
 router.get('/my-applications', protect, getMyApplications);
 router.get('/my-posts', protect, getMyJobPosts);
-router.post('/', protect, authorize('recruiter', 'admin'), createJob);
+router.post('/', protect, createJob);
 router.get('/:id', protect, getJob);
 router.put('/:id', protect, updateJob);
 router.delete('/:id', protect, deleteJob);

@@ -76,6 +76,9 @@ export default function Navbar() {
                   <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: 2 }}>{user?.headline || user?.email}</p>
                 </div>
                 <MenuItem icon={FiUser} label="My Profile" onClick={() => { navigate(`/profile/${user?._id}`); setMenuOpen(false) }} />
+                {user?.role === 'admin' && (
+                  <MenuItem icon={FiSettings} label="Admin Dashboard" onClick={() => { navigate('/admin'); setMenuOpen(false) }} />
+                )}
                 <MenuItem icon={FiSettings} label="Settings" onClick={() => setMenuOpen(false)} />
                 <div style={{ borderTop: '1px solid var(--border)', marginTop: '0.5rem', paddingTop: '0.5rem' }}>
                   <MenuItem icon={FiLogOut} label="Sign Out" onClick={handleLogout} danger />

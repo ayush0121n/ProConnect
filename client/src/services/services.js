@@ -89,3 +89,7 @@ export const uploadService = {
   uploadDocument:(file) => { const fd = new FormData(); fd.append('document', file); return API.post('/upload/document', fd, { headers: { 'Content-Type': 'multipart/form-data' } }) },
   deleteFile:    (pid)  => API.delete(`/upload/${pid}`),
 }
+
+export const adminService = {
+  getStats: () => API.get('/admin/stats'),
+}

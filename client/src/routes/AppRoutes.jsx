@@ -12,6 +12,7 @@ const JobsPage         = lazy(() => import('../pages/jobs/JobsPage'))
 const MessagesPage     = lazy(() => import('../pages/messages/MessagesPage'))
 const NetworkPage      = lazy(() => import('../pages/network/NetworkPage'))
 const NotificationsPage= lazy(() => import('../pages/notifications/NotificationsPage'))
+const AdminDashboard   = lazy(() => import('../pages/admin/AdminDashboard'))
 const NotFoundPage     = lazy(() => import('../pages/NotFoundPage'))
 
 const ProtectedRoute = ({ children }) => {
@@ -45,6 +46,7 @@ export default function AppRoutes() {
           <Route path="/messages"      element={<ProtectedRoute><MessagesPage /></ProtectedRoute>} />
           <Route path="/network"       element={<ProtectedRoute><NetworkPage /></ProtectedRoute>} />
           <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+          <Route path="/admin"         element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
           <Route path="*"              element={<NotFoundPage />} />
         </Routes>
       </Suspense>

@@ -18,6 +18,12 @@ export default function MessagesPage() {
   const [typing, setTyping] = useState(false)
   const bottomRef = useRef()
 
+  const activeConvRef = useRef(null)
+  const typingTimeoutRef = useRef(null)
+
+  // Keep activeConvRef in sync
+  useEffect(() => { activeConvRef.current = activeConv }, [activeConv])
+
   const { data: convData } = useQuery({ queryKey: ['conversations'], queryFn: messageService.getConversations })
   const conversations = convData?.data || []
 
@@ -32,13 +38,26 @@ export default function MessagesPage() {
 
   useEffect(() => {
     if (!socket) return
-    socket.on('newMessage', (msg) => {
-      if (activeConv && msg.conversation === activeConv._id) setMessages(prev => [...prev, msg])
-    })
-    socket.on('userTyping', ({ userId }) => { if (activeConv) setTyping(true) })
-    socket.on('userStopTyping', () => setTyping(false))
-    return () => { socket.off('newMessage'); socket.off('userTyping'); socket.off('userStopTyping') }
-  }, [socket, activeConv])
+    const handleNewMessage = (msg) => {
+      const current = activeConvRef.current
+      if (current && (msg.conversation === current._id)) {
+        setMessages(prev => [...prev, msg])
+      }
+    }
+    const handleTyping = () => setTyping(true)
+    const handleStopTyping = () => setTyping(false)
+    socket.on('newMessage', handleNewMessage)
+    socket.on('userTyping', handleTyping)
+    socket.on('userStopTyping', handleStopTyping)
+    return () => {
+      socket.off('newMessage', handleNewMessage)
+      socket.off('userTyping', handleTyping)
+      socket.off('userStopTyping', handleStopTyping)
+    }
+  }, [socket])
+
+  // Cleanup typing timeout on unmount
+  useEffect(() => () => { if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current) }, [])
 
   const getOtherUser = (conv) => conv.participants?.find(p => p._id !== user?._id)
 
@@ -60,8 +79,10 @@ export default function MessagesPage() {
     if (socket && activeConv) {
       const other = getOtherUser(activeConv)
       socket.emit('typing', { conversationId: activeConv._id, recipientId: other?._id })
-      clearTimeout(window._typingTimeout)
-      window._typingTimeout = setTimeout(() => socket.emit('stopTyping', { conversationId: activeConv._id, recipientId: other?._id }), 1000)
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+      typingTimeoutRef.current = setTimeout(() => {
+        socket.emit('stopTyping', { conversationId: activeConv._id, recipientId: other?._id })
+      }, 1500)
     }
   }
 
