@@ -2,6 +2,7 @@ services:
   # Backend API
   - type: web
     name: proconnect-api
+    plan: free
     runtime: node
     buildCommand: cd server && npm install && cd ../client && npm install && npm run build
     startCommand: cd server && node server.js
