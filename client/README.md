@@ -1,16 +1,33 @@
-# React + Vite
+# ProConnect Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This directory contains the React frontend for the ProConnect platform, built using Vite.
 
-Currently, two official plugins are available:
+## Tech Stack
+- **React 19**
+- **Vite** (Build Tool)
+- **TanStack Query** (Data Fetching & State Management)
+- **React Router v6** (Routing)
+- **Socket.io Client** (Real-time features)
+- **Framer Motion** (Animations)
+- **React Hook Form & Yup** (Forms & Validation)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Available Scripts
 
-## React Compiler
+In the `client` directory, you can run:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### `npm run dev`
+Runs the app in development mode using Vite. Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 
-## Expanding the ESLint configuration
+### `npm run build`
+Builds the app for production to the `dist` folder. It correctly bundles React in production mode and optimizes the build for the best performance.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### `npm run preview`
+Locally preview the production build after running `npm run build`.
+
+## Environment Variables
+Create a `.env` file in this directory with the following variables:
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_SOCKET_URL=http://localhost:5000
+```
+*(In production, these will point to your deployed backend URL)*

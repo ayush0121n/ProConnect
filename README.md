@@ -13,6 +13,7 @@ A full-stack MERN (MongoDB, Express, React, Node.js) professional networking pla
 - **Profile Management** – Experience, education, skills, certifications, endorsements
 - **Groups** – Create and join professional groups
 - **Search** – Global search across users, jobs, posts, and groups
+- **Admin Dashboard** – Platform statistics and quick job posting capabilities
 
 ## 🛠 Tech Stack
 
